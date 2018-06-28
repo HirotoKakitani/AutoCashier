@@ -63,6 +63,7 @@ def main():
 	inputValues = inputWindow.getUserInput()
 	#TODO get user input and place in inputValues
 	#inputValues = AutoIn.getUserInput()
+	
 	for i in inputValues:
 		print (i)
 

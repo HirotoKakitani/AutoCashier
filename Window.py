@@ -10,8 +10,9 @@ class Window:
 		self.root = tk.Tk()
 		self.e1 = tk.Entry(self.root)
 		self.entryList = []
-		self.enterButton = tk.Button(self.root, text='Enter', command = self.buttonCommand)
+		self.enterButton = tk.Button(self.root, text='Enter', command = self.enterCommand)
 		self.confirmButton = None
+		self.inputEntryList = []
 		
 	#get user input and place in list of tuples.
 	def getUserInput(self):
@@ -19,7 +20,7 @@ class Window:
 
 		tk.Label(self.root, text="Entries").grid(row=0)
 
-		self.e1.grid(row=0, column=1)
+		self.e1.grid(row=0, column=1, pady=10)
 		#tk.Button(self.root, text='Enter', command = self.buttonCommand).grid(row=3, column=1)#, sticky=W, pady=4)
 		self.enterButton.grid(row=3, column=1)#, sticky=W, pady=4)
 		self.root.mainloop()
@@ -52,21 +53,55 @@ class Window:
 	
 	
 	
-	#TODO displays all read entries and allows user to make any changes if needed
+	#displays all read entries and allows user to make any changes if needed
 	def confirmEntries(self):
 
 		r = 1
 		for i in self.entryList:
-			tk.Entry(self.root).grid(row=r, column = 1)
-			r +=1 
+			for j in range(1,9):
+				e2 = tk.Entry(self.root)
+				self.inputEntryList.append(e2)	#---------------------------------------------
+				
+				#TODO need some padding on the right side of the frame.  
+				if j==8:
+					e2.grid(row=r, column = j, padx=(0,50))
+				else:
+					e2.grid(row=r, column = j)
+				e2.insert(0, i[j-1])
+				
+			numLabel = tk.StringVar()
+			numLabel.set(r)
+			tk.Label(self.root, textvariable = numLabel).grid(row = r, column = 0)
+			
+			r +=1
 
-		self.confirmButton = tk.Button(self.root, text = 'Confirm', command = self.root.quit)
-		self.confirmButton.grid(row=r,column=1)
+		#using lambda function to pass argument to callback
+		self.confirmButton = tk.Button(self.root, text = 'Confirm', command =self.confirmCommand)
+		self.confirmButton.grid(row=r,column=4,pady=(20,10))
 		#TODO TODO need to split up entries so each entry defaults to corresponding value in entryList
 		#also need to implement scrollbar in case of many entries
 	
+	
+	def confirmCommand(self):
+		values = [entry.get() for entry in self.inputEntryList]
+		numEntries = 0
+		print ("length of entryList = ", len(self.entryList))
+		
+		#TODO TODO fix updating any changes to entryList
+		for v in range(0,len(values)): 
+			if v % 7 == 0 and v != 0:
+				print (numEntries)
+				tempE = (values[v-7],values[v-6],values[v-5],values[v-4],values[v-3],values[v-2],values[v-1],values[v])
+				print (tempE)
+				numEntries += 1
+				self.entryList[numEntries-1] = tempE
+
+
+		
+		self.root.quit()
+	
 	#generic function to execute 3 funtions sequentially
-	def buttonCommand(self):
+	def enterCommand(self):
 		self.enterButton.destroy()
 		self.getEntries()
 		self.confirmEntries()
