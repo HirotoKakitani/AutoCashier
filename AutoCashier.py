@@ -12,9 +12,7 @@ def findFirstEntryIndex(ws):
 		#skips empty rows
 		if not name.value:
 			continue
-		#print (name.value)
 		cellValue = name.value.split(',')
-		#print (cellValue)
 		if len(cellValue) == 2 and cellValue.pop(0) != "NAME\nLast Name":
 			return index+1
 		index += 1
@@ -34,10 +32,6 @@ def findLastEntryIndex(ws, index):
 			i += 1
 			if name.value == None or len(name.value.split(',')) != 2:
 				break
-			#print (name.value)
-	#while len(list(ws.rows)[index].value.split(',')) == 2:
-	#	print (list(ws.rows)[index].value.split(','))
-	#	index += 1
 		
 	return i
 	
@@ -53,16 +47,12 @@ def main():
 
 	#get the index range 
 	indexFirst = findFirstEntryIndex(ws)
-	#print ("IndexFirst: ", + indexFirst)
-	#print ("------------------------------------")
 	indexLast = findLastEntryIndex(ws, indexFirst)
-	#print ("------------------------------------")
-	#print ("f: ", indexFirst, "s: ", indexLast)
-	
+
+	#get user input and place in inputValues
 	inputWindow = w.Window()
 	inputValues = inputWindow.getUserInput()
-	#TODO get user input and place in inputValues
-	#inputValues = AutoIn.getUserInput()
+
 	
 	for i in inputValues:
 		print (i)
