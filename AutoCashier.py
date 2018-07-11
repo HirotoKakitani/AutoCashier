@@ -41,17 +41,21 @@ def main():
 	#TODO Need to go to correct worksheet depending on location
 #	fileName = 'C:/Users/hikakitani/Desktop/test1.xlsx'
 	fileName = 'C:/Users/hikakitani/Desktop/AutoCashierTestWorkbook.xlsx'
+	inputWindow = w.Window()
 	wb = load_workbook(fileName)
+	inputValues = inputWindow.getUserInput()
+	
 	#print (wb.sheetnames)
+	#create gui functionality for changing worksheets
 	ws = wb.active
 
-	#get the index range 
+	#get the index range
+	
 	indexFirst = findFirstEntryIndex(ws)
 	indexLast = findLastEntryIndex(ws, indexFirst)
 
 	#get user input and place in inputValues
-	inputWindow = w.Window()
-	inputValues = inputWindow.getUserInput()
+
 
 	
 	for i in inputValues:
