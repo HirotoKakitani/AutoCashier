@@ -38,17 +38,16 @@ def findLastEntryIndex(ws, index):
 def main():
 	
 	#sets up work sheet. 
-	#TODO Need to go to correct worksheet depending on location
 #	fileName = 'C:/Users/hikakitani/Desktop/test1.xlsx'
 	fileName = 'C:/Users/hikakitani/Desktop/AutoCashierTestWorkbook.xlsx'
-	inputWindow = w.Window()
 	wb = load_workbook(fileName)
+	ws = wb.active
+	inputWindow = w.Window(wb.sheetnames)
 	inputValues = inputWindow.getUserInput()
 	
-	#print (wb.sheetnames)
-	#create gui functionality for changing worksheets
-	ws = wb.active
-
+	#sets active worksheet to be the selected one
+	ws = wb[inputWindow.location]
+	#print(ws)
 	#get the index range
 	
 	indexFirst = findFirstEntryIndex(ws)
@@ -60,7 +59,8 @@ def main():
 	
 	for i in inputValues:
 		print (i)
-
+	print (inputWindow.location)
+	
 	for i in range(indexFirst,indexLast):
 		#TODO 1. check if data can go between row i and i+1
 		#	  2. if yes, move all rows down and insert

@@ -1,23 +1,18 @@
 import tkinter as tk	#for gui inputs
 
-#root = tk.Tk()
-#e1 = tk.Entry(root)
-#entryList = []
-#e2 = tk.Entry(root)
-
 class Window:
-	def __init__(self):
+	def __init__(self, sheetNames):
 		self.root = tk.Tk()
 		self.e1 = tk.Entry(self.root)
 		self.eLabel = tk.Label(self.root, text="Entries")
 		self.entryList = []
 		self.enterButton = tk.Button(self.root,	text='Enter', command = self.enterCommand)
 		self.v = tk.StringVar(self.root)		#default value in drop down menu
-		self.v.set("Location")						#set default value
-		self.dropDown = tk.OptionMenu(self.root, self.v,"loc1", "loc2", "loc3")
+		self.v.set("Location")					#set default value
+		self.dropDown = tk.OptionMenu(self.root, self.v, *sheetNames, command=self.listSelect)	#populates dropdown menu with list items
 		self.confirmButton = None
 		self.inputEntryList = []
-		
+		self.location = None
 		#Format window
 		self.e1.grid(row=0, column=1, pady=10)
 		self.eLabel.grid(row=0)
@@ -30,7 +25,7 @@ class Window:
 		self.root.mainloop()
 		return self.entryList
 	
-
+	
 	def getEntries(self):
 		#get the raw string of input
 
@@ -47,11 +42,9 @@ class Window:
 		#clean up entryList
 		self.entryList = [entry for entry in self.entryList if entry != ('','','','','','','','')]
 		
-	
-	
+		
 	#displays all read entries and allows user to make any changes if needed
 	def confirmEntries(self):
-
 		r = 1
 		for i in self.entryList:
 			for j in range(1,9):
@@ -96,8 +89,21 @@ class Window:
 		
 		self.root.quit()
 	
+	
 	#generic function to execute 3 funtions sequentially
 	def enterCommand(self):
+		if self.location == None:
+			print ("Please select a location")
+			return
+			
 		self.enterButton.destroy()
 		self.getEntries()
 		self.confirmEntries()
+	
+	
+	#callback when a location is set
+	def listSelect(self, location):
+		self.location = location
+		print (location)
+		
+	
