@@ -38,8 +38,8 @@ def findLastEntryIndex(ws, index):
 def main():
 	
 	#sets up work sheet. 
-#	fileName = 'C:/Users/hikakitani/Desktop/test1.xlsx'
-	fileName = 'C:/Users/hikakitani/Desktop/AutoCashierTestWorkbook.xlsx'
+#	fileName = 'test1.xlsx'
+	fileName = 'AutoCashierTestWorkbook.xlsx'
 	wb = load_workbook(fileName)
 	ws = wb.active
 	inputWindow = w.Window(wb.sheetnames)
@@ -54,18 +54,36 @@ def main():
 	indexLast = findLastEntryIndex(ws, indexFirst)
 
 	#get user input and place in inputValues
-
-
-	
 	for i in inputValues:
-		print (i)
+		print (i[0])
 	print (inputWindow.location)
-	
-	for i in range(indexFirst,indexLast):
-		#TODO 1. check if data can go between row i and i+1
-		#	  2. if yes, move all rows down and insert
-		#	  3. else move on
-		pass
+	#ws.insert_rows(2, 1)
+	print ("######################\n")
+	# names that come first alphabetically are considered smaller
+	for inputVal in inputValues:
+		for i in range(indexFirst+2,indexLast):
+			currentCell = ws.cell(row=i,column=1).value	#gets name of current row
+			prevCell = ws.cell(row=i-1, column=1).value #gets name of previous row
+			print (currentCell)
+			print (prevCell)
+
+			#check
+
+			#TODO need to fix if insertion happens at the very beginning 
+			if (inputVal[0] < currentCell and i == indexFirst):
+				print ("first insertion")
+				print (currentCell)
+				break
+				
+			#TODO need to find cause of mailto issue. 
+			if (inputVal[0] < currentCell and inputVal[0] > prevCell):
+				print ("\n	inserting between here!")
+				ws.insert_rows(i,1) #insert blank row for now
+				indexLast += 1
+				break
+			
+			print ()
+	wb.save(fileName)
 	
 	#print ("testing")
 
