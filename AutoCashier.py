@@ -36,7 +36,6 @@ def findLastEntryIndex(ws, index):
 	return i
 	
 def main():
-	
 	#sets up work sheet. 
 #	fileName = 'test1.xlsx'
 	fileName = 'AutoCashierTestWorkbook.xlsx'
@@ -70,7 +69,7 @@ def main():
 			#check
 
 			#TODO need to fix if insertion happens at the very beginning 
-			if (inputVal[0] < currentCell and i == indexFirst):
+			if (i == indexFirst and inputVal[0] < currentCell):
 				print ("first insertion")
 				print (currentCell)
 				break
@@ -78,13 +77,13 @@ def main():
 			#TODO need to find cause of mailto issue. 
 			if (inputVal[0] < currentCell and inputVal[0] > prevCell):
 				print ("\n	inserting between here!")
-				ws.insert_rows(i,1) #insert blank row for now
+				ws.insert_rows(i,1) 						#insert blank row
+				ws.cell(row=i,column=1).value = inputVal[0]	#just write name column for now 
 				indexLast += 1
 				break
 			
 			print ()
 	wb.save(fileName)
-	
 	#print ("testing")
 
 if __name__ == "__main__":

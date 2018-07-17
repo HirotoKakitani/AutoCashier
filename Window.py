@@ -39,7 +39,7 @@ class Window:
 			newEntry = (j[0],j[1],j[2],j[3],j[4],j[5],j[6],j[7])
 			self.entryList.append(newEntry)
 	
-		#clean up entryList
+		#clean up entryListW
 		self.entryList = [entry for entry in self.entryList if entry != ('','','','','','','','')]
 		
 		
