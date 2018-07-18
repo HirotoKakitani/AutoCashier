@@ -22,7 +22,6 @@ def findFirstEntryIndex(ws):
 	
 # get index of last row with entry
 def findLastEntryIndex(ws, index):
-	#cellValue = ws.rows[index].value.split(',')
 	i = 0
 	for name in ws['A']:
 		if i < index:
@@ -56,35 +55,35 @@ def main():
 	for i in inputValues:
 		print (i[0])
 	print (inputWindow.location)
-	#ws.insert_rows(2, 1)
 	print ("######################\n")
-	# names that come first alphabetically are considered smaller
-	for inputVal in inputValues:
-		for i in range(indexFirst+2,indexLast):
-			currentCell = ws.cell(row=i,column=1).value	#gets name of current row
-			prevCell = ws.cell(row=i-1, column=1).value #gets name of previous row
-			print (currentCell)
-			print (prevCell)
+	
 
+	# names that come first alphabetically are considered smaller
+	print ("Length of loop: ", indexLast+len(inputValues))
+	for inputVal in inputValues:
+		for i in range(indexFirst,indexLast + len(inputValues)):
+			currentCell = ws.cell(row=i,column=1).value	#gets name of current row
+			nextCell = ws.cell(row=i+1, column=1).value #gets name of next row
+			print (currentCell, "|", nextCell, "|", i)
 			#check
 
-			#TODO need to fix if insertion happens at the very beginning 
-			if (i == indexFirst and inputVal[0] < currentCell):
+			#insertion happens at the very beginning 
+			if i == indexFirst and inputVal[0] < currentCell:
 				print ("first insertion")
-				print (currentCell)
-				break
-				
-			#TODO need to find cause of mailto issue. 
-			if (inputVal[0] < currentCell and inputVal[0] > prevCell):
-				print ("\n	inserting between here!")
 				ws.insert_rows(i,1) 						#insert blank row
 				ws.cell(row=i,column=1).value = inputVal[0]	#just write name column for now 
-				indexLast += 1
+				break
+				
+			#TODO need to fix case when name is added at the very end.
+			#insertion happens at the end or somewhere in the middle
+			if i == indexLast or (inputVal[0] > currentCell and inputVal[0] < nextCell):
+				print ("\n	inserting between here!")
+				ws.insert_rows(i+1,1) 							#insert blank row
+				ws.cell(row=i+1,column=1).value = inputVal[0]	#just write name column for now 
 				break
 			
 			print ()
 	wb.save(fileName)
-	#print ("testing")
 
 if __name__ == "__main__":
 	main()
