@@ -1,4 +1,4 @@
-import tkinter as tk	#for gui inputs
+import tkinter as tk	#for gui
 
 class Window:
 	def __init__(self, sheetNames):
@@ -67,7 +67,7 @@ class Window:
 		self.confirmButton.grid(row=r,column=4,pady=(20,10))
 		
 	
-	#TODO TODO also need to implement scrollbar in case of many entries
+	#TODO also need to implement scrollbar in case of many entries
 	def confirmCommand(self):	
 		values = [entry.get() for entry in self.inputEntryList]
 		numEntries = 0
@@ -90,7 +90,7 @@ class Window:
 		self.root.quit()
 	
 	
-	#generic function to execute 3 funtions sequentially
+	#callback function for when entries are inputted
 	def enterCommand(self):
 		if self.location == None:
 			print ("Please select a location")
