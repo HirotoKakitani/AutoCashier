@@ -1,63 +1,76 @@
 from openpyxl import *	#for manipulating excel spreadsheet
+import win32com.client as win32
+import os
 import Window as w
 
 # get index of first row with entry
 def findFirstEntryIndex(ws):
 	#iterate through names of employees
 	index = 0
-	for name in ws['A']:
-		#skips empty rows
-		if not name.value:
+	col = ws.Range("A1:A10")
+	for cell in col:
+		if not cell.Value:
+			index +=1
 			continue
-		cellValue = name.value.split(',')
+		cellValue = cell.Value.split(',')
 		if len(cellValue) == 2 and cellValue.pop(0) != "NAME\nLast Name":
 			return index+1
 		index += 1
 		
 	print ("Beginning not Found")
 	return -1
-	
+
+
 # get index of last row with entry
 def findLastEntryIndex(ws, index):
-	i = 0
-	for name in ws['A']:
+	i = 0 
+	for cell in ws.Range("A1:A200"):
 		if i < index:
 			i+= 1
 			continue
 		else:
-			i += 1
-			if name.value == None or len(name.value.split(',')) != 2:
+			i+=1
+			if cell.Value == None or len(cell.Value.split(',')) != 2:
 				break
-		
 	return i
+
 
 def writeRow(ws, destRow, inputVal):
 	for v in range(0,8):
 		ws.cell(row=destRow,column=v+1).value=inputVal[v]
-	
+
+
 def main():
 	#sets up work sheet. 
-#	fileName = 'test1.xlsx'
 	fileName = 'AutoCashierTestWorkbook.xlsx'
-	wb = load_workbook(fileName)
-	ws = wb.active
-	inputWindow = w.Window(wb.sheetnames)
-	inputValues = inputWindow.getUserInput()
+	absPath = os.path.dirname(os.path.abspath(__file__))
+	path = os.path.join(absPath, fileName)
+	excel = win32.gencache.EnsureDispatch('Excel.Application')
 	
-	#sets active worksheet to be the selected one
-	ws = wb[inputWindow.location]
-	#print(ws)
-	#get the index range
+	pwWindow = w.pwWindow()	#creates a password confirmation window
+
+	wb = excel.Workbooks.Open(path, Password = pwWindow.getPassword())	#open workbook with password
+	excel.Visible = True
+	
+	#generate sheet list
+	sheetList = []
+	for sh in wb.Sheets:
+		sheetList.append(sh.Name)
+	
+	mWindow = w.mainWindow(sheetList)
+	inputValues = mWindow.getUserInput()	#get formatted data
+	ws = wb.Sheets(mWindow.location)		#set to proper location sheet
 	
 	indexFirst = findFirstEntryIndex(ws)
+	print ("first: ", indexFirst)
 	indexLast = findLastEntryIndex(ws, indexFirst)
-
-	#get user input and place in inputValues
+	print ("last: ", indexLast)
+	
 	for i in inputValues:
 		print (i[0])
-	print (inputWindow.location)
-	print ("######################\n")
+	print (mWindow.location)
 
+	"""
 	# names that come first alphabetically are considered smaller
 	print ("Length of loop: ", indexLast+len(inputValues))
 	for inputVal in inputValues:
@@ -84,6 +97,7 @@ def main():
 			
 			print ()
 	wb.save(fileName)
+	"""
 
 
 if __name__ == "__main__":

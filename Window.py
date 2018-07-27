@@ -1,24 +1,49 @@
 import tkinter as tk	#for gui
 
-class Window:
-	def __init__(self, sheetNames):
+class pwWindow:
+	def __init__(self):
 		self.root = tk.Tk()
 		self.e1 = tk.Entry(self.root)
-		self.eLabel = tk.Label(self.root, text="Entries")
+		self.eLabel = tk.Label(self.root, text = "Password")
+		self.enterButton = tk.Button(self.root, text="Enter", command=self.pwCommand)
+		self.e1.grid(row=0, column=1, pady=10)
+		self.eLabel.grid(row=0)
+		self.enterButton.grid(row=3, column=1)
+		self.pVal = None
+		
+		
+	def pwCommand(self):
+		self.pVal = self.e1.get()
+		self.root.destroy()
+		
+		
+	def getPassword(self):
+		self.root.mainloop()
+		return self.pVal	#TODO think of better way to hide value
+
+		
+class mainWindow:
+	def __init__(self, sheetNames):
+		self.root = tk.Tk()
+		
+		#self.test.grab_release()
+		self.e1 = tk.Entry(self.root)
 		self.entryList = []
-		self.enterButton = tk.Button(self.root,	text='Enter', command = self.enterCommand)
 		self.v = tk.StringVar(self.root)		#default value in drop down menu
 		self.v.set("Location")					#set default value
-		self.dropDown = tk.OptionMenu(self.root, self.v, *sheetNames, command=self.listSelect)	#populates dropdown menu with list items
 		self.confirmButton = None
 		self.inputEntryList = []
 		self.location = None
+		self.enterButton = tk.Button(self.root,	text='Enter', command = self.enterCommand)
+		self.dropDown = tk.OptionMenu(self.root, self.v, *sheetNames, command=self.listSelect)	#populates dropdown menu with list items
+		self.dropDown.grid(row=0,column=2)
+		self.eLabel = tk.Label(self.root, text="Entries")
 		#Format window
 		self.e1.grid(row=0, column=1, pady=10)
 		self.eLabel.grid(row=0)
 		self.enterButton.grid(row=3, column=1)
-		self.dropDown.grid(row=0,column=2)
-		
+	
+	
 	#get user input and place in list of tuples.
 	def getUserInput(self):
 		#entries will be ["name",id#,EID, "email","remove/notremove", "location", "existing/new"]
@@ -105,5 +130,3 @@ class Window:
 	def listSelect(self, location):
 		self.location = location
 		print (location)
-		
-	
