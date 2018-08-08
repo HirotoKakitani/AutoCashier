@@ -62,14 +62,42 @@ def main():
 	ws = wb.Sheets(mWindow.location)		#set to proper location sheet
 	
 	indexFirst = findFirstEntryIndex(ws)
-	print ("first: ", indexFirst)
+	#print ("first: ", indexFirst)
 	indexLast = findLastEntryIndex(ws, indexFirst)
-	print ("last: ", indexLast)
+	#print ("last: ", indexLast)
 	
-	for i in inputValues:
-		print (i[0])
-	print (mWindow.location)
-
+	#TODO each individual case works by itself, but not when 2 cases are encountered. 
+	
+	#names that come first alphabetically are considered smaller	
+	for inputVal in inputValues:
+		for i in range (indexFirst, indexLast + len(inputValues)):	#accounts for entries that will be inserted
+			currentCell = ws.Cells(i,1).Value
+			nextCell = ws.Cells(i+1,1).Value
+			print (inputVal)
+			print (currentCell, "|", nextCell)
+			
+			#case where insertion happens at very beginning
+			if i == indexFirst and inputVal[0] < currentCell :
+			#if i == indexFirst and inputVal[0] < currentCell:
+				#print ("first insertion")
+				#TODO insert row here
+				#ws.Cells(i,1).EntireRow.Insert()
+				print ("\ttop")
+				ws.Rows(str(i)).Insert()
+				ws.Rows(str(i)).EntireRow.ClearContents()
+				break
+				
+			#case where insertion happens in the middle or end
+			if nextCell==None or (inputVal[0] > currentCell and inputVal[0] < nextCell):
+				#rangeObj = ws.Range("A3:B3")
+				#rangeObj.EntireRow.Insert()
+				#print ("\tmiddle")
+				ws.Rows(str(i+1)).Insert()
+				ws.Rows(str(i+1)).EntireRow.ClearContents()
+				break
+			print ()
+			
+		
 	"""
 	# names that come first alphabetically are considered smaller
 	print ("Length of loop: ", indexLast+len(inputValues))
